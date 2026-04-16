@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RUSTYID</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <div class="nav-logo" onclick="showPage('home')">⬡ RUSTYID</div>
+    <div class="nav-links">
+      <button class="nav-link active" id="nav-home" onclick="showPage('home')">Search</button>
+      <button class="nav-link" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+      <button class="nav-link" id="nav-setup" onclick="showPage('setup')">Setup</button>
+    </div>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <h1>Rust intel for <span>competitive players</span></h1>
+      <p>Search public Steam data, store watchlists in Google Sheets, and show live server activity from a tiny always-on service.</p>
+
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="SteamID64, Steam profile URL, or vanity…" onkeydown="if(event.key==='Enter') runSearch()">
+        <button onclick="runSearch()">SEARCH</button>
+      </div>
+
+      <div class="search-hint">
+        Try:
+        <span onclick="prefill('76561198000000000')">SteamID64</span>
+        or
+        <span onclick="prefill('https://steamcommunity.com/id/gaben')">profile URL</span>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="card">
+        <div class="section-title">Live activity</div>
+        <div id="activityList" class="activity-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">What this version does</div>
+        <ul class="feature-list">
+          <li>Search real public Steam data</li>
+          <li>Store history and watchlist in Sheets</li>
+          <li>Track seen names over time</li>
+          <li>Discover server timing from in-game reports</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="columns server-timing-columns">
+      <div class="card">
+        <div class="section-title">Featured server timing</div>
+        <div id="featuredServerStatus"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          Discovered servers
+          <span class="server-count-pill"><span id="trackedServerCount">0</span> tracked</span>
+        </div>
+        <div id="serverTimingList" class="server-timing-list"></div>
+      </div>
+    </div>
+
+    <div id="resultArea" style="display:none;"></div>
+  </section>
+
+  <section class="page" id="page-dashboard">
+    <div class="page-wrap">
+      <div class="dashboard-grid stats">
+        <div class="stat-card">
+          <div class="stat-label">Watched</div>
+          <div class="stat-value" id="stat-watched">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Searches</div>
+          <div class="stat-value" id="stat-searches">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Banned</div>
+          <div class="stat-value" id="stat-bans">0</div>
+        </div>
+      </div>
+
+      <div id="sheetsStatus" style="margin-bottom:16px;"></div>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="section-title">Watched Players</div>
+          <div id="watchedList" class="stack"></div>
+        </div>
+        <div class="card">
+          <div class="section-title">Recent Searches</div>
+          <div id="recentSearches" class="stack"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-setup">
+    <div class="page-wrap narrow">
+      <div class="card">
+        <div class="setup-title">Backend setup</div>
+        <p class="setup-copy">Paste your deployed backend URLs here. These are saved in localStorage in your browser.</p>
+
+        <label class="field-label">Apps Script Web App URL</label>
+        <input id="scriptUrlInput" class="field-input" type="text" placeholder="https://script.google.com/macros/s/your-app-script/exec">
+
+        <label class="field-label">Live Service URL</label>
+        <input id="liveServiceUrlInput" class="field-input" type="text" placeholder="https://your-live-service.onrender.com">
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveBackendUrls()">Save Backend URLs</button>
+          <button class="btn btn-ghost" onclick="testConnections()">Test Connections</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="setup-title">How server timing gets in</div>
+        <ol class="steps">
+          <li>Your in-game command figures out the current server time.</li>
+          <li>That command posts to <code>/report-time</code> on your live service.</li>
+          <li>The website polls <code>/servers</code> and shows discovered servers automatically.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
