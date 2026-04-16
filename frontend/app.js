@@ -1,10 +1,6 @@
 const CONFIG = {
-  // Replace with your actual deployed Apps Script Web App URL
   gasUrl: 'https://script.google.com/macros/s/AKfycbynsZOzOqlE8W3GN_eIzXDRrOWwa2ffgWL0_4ajV1VeQtJFa-8pG_JKQklyXkximmJ8/exec',
-
-  // Replace with your live event service URL
-  liveUrl: 'https://your-live-service.onrender.com',
-
+  liveUrl: '',
   livePollMs: 5000
 };
 
